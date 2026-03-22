@@ -1,0 +1,2050 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Iglesia Manantial de Vida</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── RESET & VARIABLES ─────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy-900: #0B1929;
+      --navy-800: #102240;
+      --navy-700: #1C3D72;
+      --navy-600: #224891;
+      --navy-500: #2A5298;
+      --navy-400: #4A7CC7;
+      --navy-300: #8BB4E0;
+      --navy-100: #C8D9EF;
+      --navy-50:  #EEF4FB;
+      --white:    #FFFFFF;
+      --gray-50:  #F8FAFC;
+      --gray-100: #F1F5F9;
+      --gray-200: #E2E8F0;
+      --gray-400: #94A3B8;
+      --gray-600: #475569;
+      --gray-800: #1E293B;
+
+      --font-body:    'Inter', sans-serif;
+      --font-display: 'Playfair Display', serif;
+
+      --shadow-sm: 0 1px 3px rgba(13,27,42,.08), 0 1px 2px rgba(13,27,42,.06);
+      --shadow-md: 0 4px 16px rgba(13,27,42,.10);
+      --shadow-lg: 0 12px 40px rgba(13,27,42,.14);
+      --shadow-xl: 0 24px 64px rgba(13,27,42,.18);
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-body);
+      background: var(--white);
+      color: var(--gray-800);
+      overflow-x: hidden;
+    }
+
+    /* ─── CURSOR GLOW ───────────────────────────────────────── */
+    .cursor-glow {
+      position: fixed;
+      width: 500px; height: 500px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(28,61,114,.2) 0%, rgba(42,82,152,.08) 45%, transparent 70%);
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: left .2s cubic-bezier(.4,0,.2,1), top .2s cubic-bezier(.4,0,.2,1);
+      mix-blend-mode: multiply;
+    }
+
+    /* ─── SCROLLBAR ─────────────────────────────────────────── */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--gray-100); }
+    ::-webkit-scrollbar-thumb { background: var(--navy-700); border-radius: 3px; }
+
+    /* ─── UTILITY ───────────────────────────────────────────── */
+    .container {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .section { padding: 100px 0; }
+    .section-alt { background: var(--gray-50); }
+    .tag {
+      display: inline-block;
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--navy-500);
+      background: var(--navy-100);
+      padding: 4px 12px;
+      border-radius: 999px;
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+      color: var(--navy-900);
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+    .section-subtitle {
+      font-size: 1.05rem;
+      color: var(--gray-600);
+      max-width: 540px;
+      line-height: 1.7;
+    }
+    .section-header { margin-bottom: 64px; }
+
+    /* ─── REVEAL ANIMATION ──────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(64px);
+      transition: opacity .8s cubic-bezier(.4,0,.2,1), transform .8s cubic-bezier(.4,0,.2,1);
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+    .reveal-left  { opacity:0; transform:translateX(-64px); transition:opacity .8s cubic-bezier(.4,0,.2,1),transform .8s cubic-bezier(.4,0,.2,1); }
+    .reveal-right { opacity:0; transform:translateX(64px);  transition:opacity .8s cubic-bezier(.4,0,.2,1),transform .8s cubic-bezier(.4,0,.2,1); }
+    .reveal-left.visible, .reveal-right.visible { opacity:1; transform:none; }
+
+    /* stagger children */
+    .stagger > * { opacity:0; transform:translateY(56px); transition:opacity .7s cubic-bezier(.4,0,.2,1),transform .7s cubic-bezier(.4,0,.2,1); }
+    .stagger.visible > *:nth-child(1) { opacity:1;transform:none;transition-delay:.05s }
+    .stagger.visible > *:nth-child(2) { opacity:1;transform:none;transition-delay:.15s }
+    .stagger.visible > *:nth-child(3) { opacity:1;transform:none;transition-delay:.25s }
+    .stagger.visible > *:nth-child(4) { opacity:1;transform:none;transition-delay:.35s }
+    .stagger.visible > *:nth-child(5) { opacity:1;transform:none;transition-delay:.45s }
+    .stagger.visible > *:nth-child(6) { opacity:1;transform:none;transition-delay:.55s }
+
+    /* ─── NAVBAR ────────────────────────────────────────────── */
+    .navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 0 24px;
+      transition: background .4s, box-shadow .4s, padding .4s;
+    }
+    .navbar.scrolled {
+      background: rgba(255,255,255,.92);
+      backdrop-filter: blur(12px);
+      box-shadow: var(--shadow-sm);
+      padding: 0 24px;
+    }
+    .nav-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 72px;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .nav-logo-icon {
+      width: 54px; height: 54px;
+      background: transparent;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .nav-logo-icon svg { width: 28px; height: 28px; fill: white; }
+    .nav-logo-icon img { width: 54px; height: 54px; object-fit: contain; border-radius: 12px; }
+    .nav-logo-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+    }
+    .nav-logo-text span:first-child {
+      font-size: .65rem;
+      font-weight: 600;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--navy-500);
+    }
+    .nav-logo-text span:last-child {
+      font-weight: 800;
+      font-size: .95rem;
+      color: var(--navy-900);
+    }
+    .navbar:not(.scrolled) .nav-logo-text span:last-child { color: var(--white); }
+    .navbar:not(.scrolled) .nav-logo-text span:first-child { color: var(--navy-300); }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      list-style: none;
+    }
+    .nav-links a {
+      text-decoration: none;
+      font-size: .88rem;
+      font-weight: 500;
+      color: var(--navy-900);
+      padding: 8px 12px;
+      border-radius: 8px;
+      transition: background .2s, color .2s;
+    }
+    .navbar:not(.scrolled) .nav-links a { color: rgba(255,255,255,.85); }
+    .nav-links a:hover { background: var(--navy-100); color: var(--navy-700); }
+    .navbar:not(.scrolled) .nav-links a:hover { background: rgba(255,255,255,.15); color: white; }
+
+    .nav-cta {
+      background: var(--navy-900) !important;
+      color: white !important;
+      padding: 8px 20px !important;
+      border-radius: 999px !important;
+      font-weight: 700 !important;
+      border: 1.5px solid var(--navy-700) !important;
+      letter-spacing: .02em;
+    }
+    .nav-cta:hover { background: var(--navy-700) !important; border-color: var(--navy-500) !important; }
+
+    .nav-hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 8px;
+    }
+    .nav-hamburger span {
+      display: block;
+      width: 22px; height: 2px;
+      background: var(--navy-900);
+      border-radius: 2px;
+      transition: all .3s;
+    }
+    .navbar:not(.scrolled) .nav-hamburger span { background: white; }
+
+    /* ─── HERO ──────────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      background: var(--navy-900);
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 65% 30%, rgba(42,82,152,.18) 0%, transparent 65%),
+        radial-gradient(ellipse 40% 30% at 15% 70%, rgba(28,61,114,.28) 0%, transparent 60%),
+        linear-gradient(160deg, #0B1929 0%, #1C3D72 48%, #122240 100%);
+    }
+    /* subtle dot grid overlay */
+    .hero-bg::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle, rgba(255,255,255,.05) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    /* hero fade — debajo del contenido (z-index:1) para que los textos siempre se lean */
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 60%;
+      background: linear-gradient(to bottom, transparent 0%, rgba(11,25,41,.15) 25%, rgba(248,250,252,.6) 68%, #F8FAFC 100%);
+      pointer-events: none;
+      z-index: 1;
+    }
+    .hero-particles {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    /* ripple ring animation */
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,.12);
+      transform: translate(-50%,-50%) scale(0);
+      animation: ripple-out ease-out infinite;
+    }
+    @keyframes ripple-out {
+      0%   { transform: translate(-50%,-50%) scale(0);   opacity: .55; }
+      70%  { opacity: .15; }
+      100% { transform: translate(-50%,-50%) scale(1);   opacity: 0; }
+    }
+    /* slow diagonal lines that drift */
+    .drift-line {
+      position: absolute;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, rgba(255,255,255,.07) 40%, rgba(255,255,255,.07) 60%, transparent);
+      animation: drift-down linear infinite;
+    }
+    @keyframes drift-down {
+      0%   { transform: translateY(-100%); opacity: 0; }
+      10%  { opacity: 1; }
+      90%  { opacity: 1; }
+      100% { transform: translateY(100vh); opacity: 0; }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 24px;
+      padding-top: 100px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+    .hero-left {}
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--navy-300);
+      margin-bottom: 20px;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 24px; height: 2px;
+      background: var(--navy-400);
+    }
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.8rem, 5.5vw, 4.5rem);
+      font-weight: 900;
+      color: var(--white);
+      line-height: 1.08;
+      margin-bottom: 24px;
+    }
+    .hero-title em {
+      font-style: normal;
+      color: var(--navy-300);
+    }
+    .hero-desc {
+      font-size: 1.1rem;
+      color: rgba(255,255,255,.7);
+      line-height: 1.75;
+      margin-bottom: 40px;
+      max-width: 460px;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 28px;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: .95rem;
+      text-decoration: none;
+      cursor: pointer;
+      border: none;
+      transition: all .25s;
+    }
+    .btn-primary {
+      background: var(--navy-500);
+      color: white;
+      box-shadow: 0 4px 20px rgba(37,99,235,.4);
+    }
+    .btn-primary:hover { background: var(--navy-400); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(37,99,235,.5); }
+    .btn-outline {
+      background: transparent;
+      color: white;
+      border: 2px solid rgba(255,255,255,.3);
+    }
+    .btn-outline:hover { border-color: white; background: rgba(255,255,255,.08); transform: translateY(-2px); }
+
+    /* Weekly message card */
+    .hero-right {}
+    .weekly-card {
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(255,255,255,.12);
+      backdrop-filter: blur(16px);
+      border-radius: 24px;
+      padding: 36px;
+      position: relative;
+      overflow: hidden;
+    }
+    .weekly-card::before {
+      content: '';
+      position: absolute;
+      top: -1px; left: 32px; right: 32px; height: 3px;
+      background: linear-gradient(90deg, var(--navy-500), var(--navy-300));
+      border-radius: 0 0 4px 4px;
+    }
+    .weekly-label {
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--navy-300);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .weekly-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(255,255,255,.12);
+    }
+    .weekly-verse {
+      font-family: var(--font-display);
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: white;
+      line-height: 1.4;
+      margin-bottom: 16px;
+    }
+    .weekly-ref {
+      font-size: .88rem;
+      color: var(--navy-300);
+      font-weight: 600;
+    }
+    .weekly-msg {
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255,255,255,.1);
+      font-size: .95rem;
+      color: rgba(255,255,255,.7);
+      line-height: 1.7;
+    }
+    .weekly-week {
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .weekly-week span {
+      font-size: .8rem;
+      color: rgba(255,255,255,.4);
+    }
+    .weekly-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--navy-400);
+      animation: pulse 2s ease infinite;
+    }
+    @keyframes pulse {
+      0%,100% { box-shadow: 0 0 0 0 rgba(59,130,246,.5); }
+      50%      { box-shadow: 0 0 0 8px rgba(59,130,246,0); }
+    }
+
+    /* hero stats */
+    .hero-stats {
+      display: flex;
+      gap: 32px;
+      margin-top: 48px;
+      padding-top: 36px;
+      border-top: 1px solid rgba(255,255,255,.1);
+    }
+    .stat-item { text-align: center; }
+    .stat-num {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: white;
+      display: block;
+    }
+    .stat-label {
+      font-size: .78rem;
+      color: rgba(255,255,255,.5);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    /* ─── SCHEDULE ──────────────────────────────────────────── */
+    .schedule-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+    .schedule-card {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: 20px;
+      padding: 28px 24px;
+      text-align: center;
+      transition: all .3s;
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+    }
+    .schedule-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--navy-700), var(--navy-400));
+      transform: scaleX(0);
+      transition: transform .3s;
+    }
+    .schedule-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-6px); border-color: var(--navy-200); }
+    .schedule-card:hover::after { transform: scaleX(1); }
+    .schedule-day {
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--navy-500);
+      margin-bottom: 10px;
+    }
+    .schedule-name {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--navy-900);
+      margin-bottom: 6px;
+    }
+    .schedule-time {
+      font-size: .9rem;
+      color: var(--gray-600);
+      font-weight: 500;
+    }
+    .schedule-icon {
+      width: 48px; height: 48px;
+      background: var(--navy-50);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      font-size: 1.4rem;
+    }
+
+    /* ─── ABOUT ─────────────────────────────────────────────── */
+    .about-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .about-visual {
+      position: relative;
+    }
+    .about-img-box {
+      border-radius: 24px;
+      aspect-ratio: 4/5;
+      display: flex;
+      align-items: flex-end;
+      padding: 0;
+      overflow: hidden;
+      position: relative;
+    }
+    .about-img-box img {
+      position: absolute;
+      inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+    .about-img-box::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(11,25,41,.65) 0%, transparent 55%);
+      z-index: 1;
+    }
+    .about-badge {
+      position: relative;
+      z-index: 2;
+      background: rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.15);
+      backdrop-filter: blur(12px);
+      border-radius: 16px;
+      padding: 20px 24px;
+      color: white;
+    }
+    .about-badge-title {
+      font-family: var(--font-display);
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .about-badge-sub { font-size: .88rem; opacity: .7; }
+    .about-float {
+      position: absolute;
+      top: -20px; right: -20px;
+      background: var(--navy-500);
+      border-radius: 20px;
+      padding: 20px;
+      color: white;
+      box-shadow: var(--shadow-xl);
+      text-align: center;
+    }
+    .about-float-num { font-size: 2rem; font-weight: 800; }
+    .about-float-label { font-size: .75rem; opacity: .8; }
+
+    .about-content {}
+    .about-lead {
+      font-size: 1.15rem;
+      color: var(--gray-600);
+      line-height: 1.8;
+      margin-bottom: 28px;
+    }
+    .about-values {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .value-item {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .value-icon {
+      width: 44px; height: 44px;
+      min-width: 44px;
+      background: var(--navy-50);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+    .value-text h4 {
+      font-weight: 700;
+      color: var(--navy-900);
+      margin-bottom: 4px;
+    }
+    .value-text p { font-size: .9rem; color: var(--gray-600); line-height: 1.6; }
+
+    /* ─── GROUPS ────────────────────────────────────────────── */
+    .groups-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+    }
+    .group-card {
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      aspect-ratio: 4/3;
+      cursor: pointer;
+      transition: transform .35s;
+    }
+    .group-card:hover { transform: scale(1.03); }
+    .group-card:hover .group-overlay { opacity: 1; }
+    .group-card:hover .group-info { transform: translateY(0); }
+    .group-bg {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      transition: transform .5s;
+    }
+    .group-card:hover .group-bg { transform: scale(1.06); }
+    .group-gradient {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(13,27,42,.95) 0%, rgba(13,27,42,.3) 50%, transparent 100%);
+    }
+    .group-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(37,99,235,.15);
+      opacity: 0;
+      transition: opacity .3s;
+    }
+    .group-info {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 28px 24px;
+      transform: translateY(8px);
+      transition: transform .35s;
+    }
+    .group-emoji { font-size: 2rem; margin-bottom: 10px; display: block; }
+    .group-name {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 6px;
+    }
+    .group-desc { font-size: .88rem; color: rgba(255,255,255,.75); line-height: 1.6; }
+    .group-tag {
+      display: inline-block;
+      margin-top: 12px;
+      background: rgba(255,255,255,.15);
+      color: white;
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+
+    /* group bg colors */
+    .group-bg-1 { background: linear-gradient(160deg, #1B3A6B, #2563EB); }
+    .group-bg-2 { background: linear-gradient(160deg, #0D1B2A, #1B3A6B); }
+    .group-bg-3 { background: linear-gradient(160deg, #1E4080, #3B82F6); }
+    .group-bg-4 { background: linear-gradient(160deg, #0D1B2A, #122236); }
+    .group-bg-5 { background: linear-gradient(160deg, #1B3A6B, #0D1B2A); }
+
+    /* ─── WORKSHOPS ─────────────────────────────────────────── */
+    .workshops-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+    .workshop-card {
+      background: var(--white);
+      border: 1px solid var(--gray-200);
+      border-radius: 20px;
+      padding: 32px;
+      transition: all .3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .workshop-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; bottom: 0; width: 3px;
+      background: linear-gradient(to bottom, var(--navy-700), var(--navy-400));
+      transform: scaleY(0);
+      transform-origin: top;
+      transition: transform .3s;
+    }
+    .workshop-card:hover { box-shadow: var(--shadow-lg); transform: translateX(4px); border-color: var(--navy-300); }
+    .workshop-card:hover::before { transform: scaleY(1); }
+    .workshop-icon {
+      width: 52px; height: 52px;
+      background: var(--navy-50);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+    }
+    .workshop-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--navy-900);
+      margin-bottom: 10px;
+    }
+    .workshop-desc {
+      font-size: .92rem;
+      color: var(--gray-600);
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+    .workshop-meta {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .workshop-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: .75rem;
+      font-weight: 600;
+      color: var(--navy-700);
+      background: var(--navy-50);
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    /* ─── RECORDINGS ────────────────────────────────────────── */
+    .recordings-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+    .recording-card {
+      background: var(--navy-900);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: transform .3s, box-shadow .3s;
+    }
+    .recording-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-xl); }
+    .recording-thumb {
+      position: relative;
+      aspect-ratio: 16/9;
+      background: var(--navy-800);
+      overflow: hidden;
+    }
+    .recording-thumb iframe {
+      width: 100%; height: 100%;
+      border: none;
+      pointer-events: none;
+    }
+    .recording-play {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(13,27,42,.4);
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .recording-card:hover .recording-play { background: rgba(13,27,42,.2); }
+    .recording-play-btn {
+      width: 56px; height: 56px;
+      background: rgba(255,255,255,.95);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform .2s;
+    }
+    .recording-card:hover .recording-play-btn { transform: scale(1.12); }
+    .recording-play-btn svg { width: 20px; height: 20px; fill: var(--navy-700); margin-left: 3px; }
+    .recording-info { padding: 20px 22px; }
+    .recording-date { font-size: .75rem; color: var(--navy-300); margin-bottom: 6px; font-weight: 600; }
+    .recording-title { font-size: 1rem; font-weight: 700; color: white; line-height: 1.4; }
+    .recording-duration {
+      margin-top: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: .8rem;
+      color: rgba(255,255,255,.5);
+    }
+    .recording-duration svg { width: 14px; height: 14px; fill: currentColor; }
+
+    .recordings-cta {
+      text-align: center;
+      margin-top: 52px;
+    }
+    .btn-yt {
+      background: #FF0000;
+      color: white;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 28px;
+      border-radius: 999px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all .25s;
+    }
+    .btn-yt:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,0,0,.3); }
+    .btn-yt svg { width: 22px; height: 22px; fill: currentColor; }
+
+    /* ─── LOCATION ──────────────────────────────────────────── */
+    .location-inner {
+      display: flex;
+      flex-direction: column;
+      gap: 56px;
+    }
+    .location-top {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: start;
+    }
+    @media (max-width: 900px) { .location-top { grid-template-columns: 1fr; gap: 32px; } }
+    .contact-blocks {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .contact-block {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+    }
+    .contact-block-icon {
+      width: 48px; height: 48px;
+      min-width: 48px;
+      background: var(--navy-50);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+    }
+    .contact-block-text h4 {
+      font-weight: 700;
+      color: var(--navy-900);
+      margin-bottom: 4px;
+    }
+    .contact-block-text p, .contact-block-text a {
+      font-size: .93rem;
+      color: var(--gray-600);
+      line-height: 1.6;
+      text-decoration: none;
+    }
+    .contact-block-text a:hover { color: var(--navy-500); }
+
+    .social-links {
+      display: flex;
+      gap: 12px;
+      margin-top: 32px;
+    }
+    .social-btn {
+      width: 44px; height: 44px;
+      border-radius: 12px;
+      background: var(--gray-100);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      color: var(--navy-700);
+      font-size: 1.1rem;
+      transition: all .2s;
+    }
+    .social-btn:hover { background: var(--navy-700); color: white; transform: translateY(-3px); }
+
+    .map-wrapper {
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+      background: var(--navy-100);
+      aspect-ratio: 4/3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .map-wrapper iframe { width: 100%; height: 100%; border: none; }
+    .map-placeholder {
+      text-align: center;
+      color: var(--navy-700);
+    }
+    .map-placeholder svg { width: 48px; height: 48px; fill: var(--navy-400); margin-bottom: 12px; }
+    .map-placeholder p { font-weight: 600; font-size: .95rem; }
+    .map-placeholder span { font-size: .85rem; color: var(--gray-600); }
+
+    /* ─── PASTORES ──────────────────────────────────────────── */
+    .pastores-section {
+      background: var(--navy-900);
+      position: relative;
+      overflow: hidden;
+    }
+    .pastores-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(circle, rgba(255,255,255,.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+    }
+    .pastores-header { margin-bottom: 72px; }
+    .pastores-header .tag { background: rgba(139,180,224,.15); color: var(--navy-300); }
+    .pastores-header .section-title { color: white; }
+    .pastores-header .section-subtitle { color: rgba(255,255,255,.55); }
+
+    .pastores-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+    .pastor-card {
+      position: relative;
+      border-radius: 28px;
+      overflow: hidden;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.08);
+      transition: transform .4s, border-color .3s;
+      cursor: default;
+    }
+    .pastor-card:hover { transform: translateY(-8px); border-color: rgba(139,180,224,.25); }
+    .pastor-photo {
+      position: relative;
+      height: 460px;
+      overflow: hidden;
+    }
+    .pastor-photo img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      transition: transform .6s cubic-bezier(.4,0,.2,1);
+      filter: grayscale(15%);
+    }
+    .pastor-card:hover .pastor-photo img { transform: scale(1.04); filter: grayscale(0%); }
+    .pastor-photo-gradient {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, var(--navy-900) 0%, rgba(11,25,41,.6) 35%, transparent 70%);
+    }
+    .pastor-badge {
+      position: absolute;
+      top: 20px; left: 20px;
+      background: rgba(28,61,114,.85);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(139,180,224,.2);
+      color: var(--navy-300);
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      padding: 6px 14px;
+      border-radius: 999px;
+    }
+    .pastor-info {
+      padding: 28px 32px 36px;
+    }
+    .pastor-name {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 900;
+      color: white;
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+    .pastor-name em {
+      font-style: normal;
+      color: var(--navy-300);
+    }
+    .pastor-role {
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--navy-400);
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .pastor-role::before {
+      content: '';
+      display: block;
+      width: 28px; height: 2px;
+      background: var(--navy-500);
+    }
+    .pastor-bio {
+      font-size: .93rem;
+      color: rgba(255,255,255,.6);
+      line-height: 1.75;
+    }
+    .pastor-divider {
+      height: 1px;
+      background: rgba(255,255,255,.07);
+      margin: 20px 0;
+    }
+    .pastor-quote {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-style: italic;
+      color: rgba(255,255,255,.4);
+      line-height: 1.6;
+    }
+
+    @media (max-width: 900px) {
+      .pastores-grid { grid-template-columns: 1fr; }
+      .pastor-photo { height: 340px; }
+    }
+
+    /* ─── GALERÍA ───────────────────────────────────────────── */
+    .gallery-section { padding: 100px 0 0; overflow: hidden; }
+
+    /* bento grid */
+    .bento {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-template-rows: 260px 260px;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .bento-item {
+      position: relative;
+      border-radius: 18px;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .bento-item img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform .6s cubic-bezier(.4,0,.2,1), filter .4s;
+      filter: brightness(.92);
+    }
+    .bento-item:hover img { transform: scale(1.07); filter: brightness(.75); }
+    .bento-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(11,25,41,.8) 0%, transparent 55%);
+      opacity: 0;
+      transition: opacity .35s;
+      display: flex;
+      align-items: flex-end;
+      padding: 20px;
+    }
+    .bento-item:hover .bento-overlay { opacity: 1; }
+    .bento-overlay span {
+      color: white;
+      font-size: .82rem;
+      font-weight: 600;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      opacity: .85;
+    }
+    /* bento layout assignments */
+    .bento-item:nth-child(1) { grid-column: 1 / 6;  grid-row: 1 / 3; }
+    .bento-item:nth-child(2) { grid-column: 6 / 9;  grid-row: 1 / 2; }
+    .bento-item:nth-child(3) { grid-column: 9 / 13; grid-row: 1 / 2; }
+    .bento-item:nth-child(4) { grid-column: 6 / 9;  grid-row: 2 / 3; }
+    .bento-item:nth-child(5) { grid-column: 9 / 11; grid-row: 2 / 3; }
+    .bento-item:nth-child(6) { grid-column: 11/ 13; grid-row: 2 / 3; }
+
+    /* marquee */
+    .marquee-wrap { display: flex; flex-direction: column; gap: 12px; padding-bottom: 100px; }
+    .marquee-row {
+      display: flex;
+      gap: 12px;
+      width: max-content;
+      animation: marquee-left 30s linear infinite;
+    }
+    .marquee-row.reverse { animation: marquee-right 34s linear infinite; }
+    .marquee-row:hover { animation-play-state: paused; }
+    @keyframes marquee-left  { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+    @keyframes marquee-right { 0% { transform: translateX(-50%); } 100% { transform: translateX(0); } }
+    .marquee-photo {
+      width: 380px;
+      height: 260px;
+      flex-shrink: 0;
+      border-radius: 16px;
+      overflow: hidden;
+      position: relative;
+    }
+    .marquee-photo img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      transition: transform .5s, filter .4s;
+      filter: brightness(.9);
+    }
+    .marquee-photo:hover img { transform: scale(1.06); filter: brightness(.75); }
+    .marquee-photo-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(28,61,114,.35);
+      opacity: 0;
+      transition: opacity .3s;
+      border-radius: 16px;
+    }
+    .marquee-photo:hover .marquee-photo-overlay { opacity: 1; }
+
+    @media (max-width: 900px) {
+      .bento { grid-template-columns: 1fr 1fr; grid-template-rows: repeat(4, 200px); }
+      .bento-item:nth-child(1) { grid-column: 1/3; grid-row: 1/2; }
+      .bento-item:nth-child(2) { grid-column: 1/2; grid-row: 2/3; }
+      .bento-item:nth-child(3) { grid-column: 2/3; grid-row: 2/3; }
+      .bento-item:nth-child(4) { grid-column: 1/2; grid-row: 3/4; }
+      .bento-item:nth-child(5) { grid-column: 2/3; grid-row: 3/4; }
+      .bento-item:nth-child(6) { grid-column: 1/3; grid-row: 4/5; }
+      .marquee-photo { width: 260px; height: 180px; }
+    }
+
+    /* ─── FOOTER ────────────────────────────────────────────── */
+    .footer {
+      background: var(--navy-900);
+      color: rgba(255,255,255,.55);
+      padding: 64px 0 32px;
+    }
+    .footer-inner {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 48px;
+    }
+    .footer-brand-name {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 12px;
+    }
+    .footer-brand-p { font-size: .9rem; line-height: 1.7; max-width: 260px; }
+    .footer-col h5 {
+      font-size: .78rem;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--navy-300);
+      margin-bottom: 18px;
+    }
+    .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-col ul a {
+      color: rgba(255,255,255,.55);
+      text-decoration: none;
+      font-size: .9rem;
+      transition: color .2s;
+    }
+    .footer-col ul a:hover { color: white; }
+    .footer-bottom {
+      padding-top: 28px;
+      border-top: 1px solid rgba(255,255,255,.08);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .footer-bottom p { font-size: .83rem; }
+
+    /* ─── MOBILE ────────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .hero-content { grid-template-columns: 1fr; gap: 48px; padding-top: 120px; }
+      .hero-right { order: -1; }
+      .about-inner { grid-template-columns: 1fr; gap: 48px; }
+      .footer-inner { grid-template-columns: 1fr 1fr; }
+      .nav-links, .nav-cta { display: none; }
+      .nav-hamburger { display: flex; }
+      .hero-stats { gap: 20px; }
+    }
+    @media (max-width: 600px) {
+      .section { padding: 72px 0; }
+      .footer-inner { grid-template-columns: 1fr; gap: 32px; }
+      .hero-stats { flex-wrap: wrap; }
+      .groups-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* ─── MOBILE NAV ────────────────────────────────────────── */
+    .mobile-nav {
+      position: fixed;
+      inset: 0;
+      z-index: 99;
+      background: rgba(13,27,42,.97);
+      backdrop-filter: blur(8px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 28px;
+      transform: translateX(100%);
+      transition: transform .4s cubic-bezier(.4,0,.2,1);
+    }
+    .mobile-nav.open { transform: none; }
+    .mobile-nav a {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: white;
+      text-decoration: none;
+      opacity: .8;
+      transition: opacity .2s;
+    }
+    .mobile-nav a:hover { opacity: 1; }
+    .mobile-close {
+      position: absolute;
+      top: 24px; right: 24px;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 1.8rem;
+      cursor: pointer;
+      width: 44px; height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<!-- MOBILE NAV -->
+<nav class="mobile-nav" id="mobileNav">
+  <button class="mobile-close" id="mobileClose">&#x2715;</button>
+  <a href="#reuniones" onclick="closeMobile()">Reuniones</a>
+  <a href="#quienes-somos" onclick="closeMobile()">Quiénes Somos</a>
+  <a href="#pastores" onclick="closeMobile()">Pastores</a>
+  <a href="#grupos" onclick="closeMobile()">Grupos</a>
+  <a href="#talleres" onclick="closeMobile()">Talleres</a>
+  <a href="#grabaciones" onclick="closeMobile()">Grabaciones</a>
+  <a href="#contacto" onclick="closeMobile()">Contacto</a>
+</nav>
+
+<!-- NAVBAR -->
+<header class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <div class="nav-logo-icon">
+        <!--
+          PARA AGREGAR TU LOGO:
+          1. Coloca tu archivo de logo (logo.png / logo.svg) en la misma carpeta que este HTML
+          2. Reemplaza la línea del SVG por:  <img src="logo.png" alt="Logo Manantial de Vida" />
+          3. Puedes eliminar el SVG de abajo una vez que tengas el logo listo
+        -->
+        <img src="317269202_130432983185212_3648290930219244347_n.jpg" alt="Logo Manantial de Vida" />
+      </div>
+      <div class="nav-logo-text">
+        <span>Iglesia</span>
+        <span>Manantial de Vida</span>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#reuniones">Reuniones</a></li>
+      <li><a href="#quienes-somos">Quiénes Somos</a></li>
+      <li><a href="#pastores">Pastores</a></li>
+      <li><a href="#grupos">Grupos</a></li>
+      <li><a href="#talleres">Talleres</a></li>
+      <li><a href="#grabaciones">Grabaciones</a></li>
+      <li><a href="#contacto" class="nav-cta">Contacto</a></li>
+    </ul>
+    <button class="nav-hamburger" id="navHamburger" aria-label="Menú">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- ════════════ HERO ════════════ -->
+<section class="hero" id="inicio">
+  <div class="hero-bg"></div>
+  <div class="hero-particles" id="particles"></div>
+
+  <div class="hero-content">
+    <div class="hero-left">
+      <div class="hero-eyebrow">Iglesia Manantial de Vida</div>
+      <h1 class="hero-title">
+        Un lugar donde<br/>el agua <em>viva</em><br/>fluye sin cesar
+      </h1>
+      <p class="hero-desc">
+        Somos una comunidad de fe comprometida con el amor, la familia y el crecimiento espiritual. Todos son bienvenidos aquí.
+      </p>
+      <div class="hero-actions">
+        <a href="#reuniones" class="btn btn-primary">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>
+          Ver Reuniones
+        </a>
+        <a href="#quienes-somos" class="btn btn-outline">Conócenos</a>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat-item">
+          <span class="stat-num">+50</span>
+          <span class="stat-label">Familias</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">+30</span>
+          <span class="stat-label">Jóvenes</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">❤️</span>
+          <span class="stat-label">Un gran corazón</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="weekly-card">
+        <div class="weekly-label">
+          <span class="weekly-dot"></span>
+          Mensaje de la Semana
+        </div>
+        <div class="weekly-verse" id="weeklyVerse"></div>
+        <div class="weekly-ref" id="weeklyRef"></div>
+        <div class="weekly-msg" id="weeklyMsg"></div>
+        <div class="weekly-week">
+          <span id="weeklyDate"></span>
+          <span style="font-size:.8rem;color:rgba(255,255,255,.3)">Semana <span id="weeklyNum"></span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ REUNIONES ════════════ -->
+<section class="section" id="reuniones">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="tag">Horarios</span>
+      <h2 class="section-title">Días de Reunión</h2>
+      <p class="section-subtitle">Ven a ser parte de nuestra comunidad. Siempre hay un espacio para ti en Manantial de Vida.</p>
+    </div>
+
+    <div class="schedule-grid stagger">
+      <div class="schedule-card">
+        <div class="schedule-icon">🕊️</div>
+        <div class="schedule-day">Miércoles</div>
+        <div class="schedule-name">Culto General</div>
+        <div class="schedule-time">20:00 hrs</div>
+      </div>
+      <div class="schedule-card">
+        <div class="schedule-icon">🙏</div>
+        <div class="schedule-day">Jueves</div>
+        <div class="schedule-name">Oración</div>
+        <div class="schedule-time">20:00 hrs</div>
+      </div>
+      <div class="schedule-card">
+        <div class="schedule-icon">✨</div>
+        <div class="schedule-day">Domingo</div>
+        <div class="schedule-name">Culto General</div>
+        <div class="schedule-time">10:00 AM</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ QUIÉNES SOMOS ════════════ -->
+<section class="section section-alt" id="quienes-somos">
+  <div class="container">
+    <div class="about-inner">
+      <div class="about-visual reveal-left">
+        <div class="about-img-box">
+          <img src="fotos_iglesia/estucasa.jpg" alt="Esta es tu casa — Iglesia Manantial de Vida" loading="lazy" />
+          <div class="about-badge" style="position:relative;z-index:2;margin:28px;">
+            <div class="about-badge-title">Manantial de Vida</div>
+            <div class="about-badge-sub">"Como el ciervo brama por las aguas..." — Sal 42:1</div>
+          </div>
+        </div>
+        <div class="about-float">
+          <div class="about-float-num">2008</div>
+          <div class="about-float-label">Fundada</div>
+        </div>
+      </div>
+
+      <div class="about-content reveal-right">
+        <span class="tag">Nuestra Historia</span>
+        <h2 class="section-title">Quiénes Somos</h2>
+        <p class="about-lead">
+          Iglesia Manantial de Vida nació en 2008 con una visión clara: ser una fuente de agua viva para la comunidad. Comenzamos como un pequeño grupo de familias y hoy somos una iglesia vibrante que impacta vidas con el amor de Dios.
+        </p>
+        <p class="about-lead">
+          Creemos en la familia, la comunidad y en el poder transformador del Evangelio. Nuestra misión es hacer discípulos que hagan discípulos, en nuestra ciudad y más allá.
+        </p>
+        <div class="about-values">
+          <div class="value-item">
+            <div class="value-icon">💧</div>
+            <div class="value-text">
+              <h4>Autenticidad</h4>
+              <p>Un lugar donde puedes ser tú mismo, sin máscaras ni pretensiones.</p>
+            </div>
+          </div>
+          <div class="value-item">
+            <div class="value-icon">❤️</div>
+            <div class="value-text">
+              <h4>Familia</h4>
+              <p>Cada persona que entra es parte de nuestra familia. Nadie camina solo aquí.</p>
+            </div>
+          </div>
+          <div class="value-item">
+            <div class="value-icon">🌱</div>
+            <div class="value-text">
+              <h4>Crecimiento</h4>
+              <p>Creemos que cada persona tiene un destino y trabajamos para desarrollarlo.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ PASTORES ════════════ -->
+<section class="section pastores-section" id="pastores">
+  <div class="container">
+    <div class="section-header pastores-header reveal">
+      <span class="tag">Liderazgo</span>
+      <h2 class="section-title">Nuestros Pastores</h2>
+      <p class="section-subtitle">Personas comprometidas con la familia, la fe y el servicio a la comunidad.</p>
+    </div>
+
+    <div class="pastores-grid stagger">
+
+      <!-- PASTOR ANTONIO -->
+      <div class="pastor-card">
+        <div class="pastor-photo">
+          <img src="fotos_iglesia/antonio_pastor.jpg" alt="Pastor Antonio" loading="lazy" />
+          <div class="pastor-photo-gradient"></div>
+          <span class="pastor-badge">Pastor Principal</span>
+        </div>
+        <div class="pastor-info">
+          <div class="pastor-role">Pastor</div>
+          <div class="pastor-name">Antonio<br/><em>Aldea</em></div>
+          <p class="pastor-bio">
+            Apasionado por ver vidas transformadas, lidera Manantial de Vida con amor, visión y un corazón para la familia. Su ministerio combina la enseñanza bíblica con el amor genuino a las personas.
+          </p>
+          <div class="pastor-divider"></div>
+          <div class="pastor-quote">"Dios tiene un plan para cada persona que entra por esta puerta."</div>
+        </div>
+      </div>
+
+      <!-- PASTORA MÓNICA -->
+      <div class="pastor-card">
+        <div class="pastor-photo">
+          <img src="fotos_iglesia/monica_pastora.jpg" alt="Pastora Mónica" loading="lazy" />
+          <div class="pastor-photo-gradient"></div>
+          <span class="pastor-badge">Pastora</span>
+        </div>
+        <div class="pastor-info">
+          <div class="pastor-role">Pastora</div>
+          <div class="pastor-name">Mónica<br/><em>Castro</em></div>
+          <p class="pastor-bio">
+            Con un corazón de madre y una fe inquebrantable, lidera los ministerios de mujeres y familia. Su ministerio es un refugio de sanidad, esperanza y propósito para cada persona.
+          </p>
+          <div class="pastor-divider"></div>
+          <div class="pastor-quote">"La iglesia más poderosa es la que se abraza como familia."</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ GALERÍA ════════════ -->
+<section class="gallery-section" id="galeria">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="tag">Nuestra Comunidad</span>
+      <h2 class="section-title">Vida en Manantial</h2>
+      <p class="section-subtitle">Momentos reales, personas reales. Así se vive la fe en nuestra comunidad.</p>
+    </div>
+  </div>
+
+  <!-- BENTO GRID -->
+  <div class="container">
+    <div class="bento reveal">
+      <div class="bento-item">
+        <img src="fotos_iglesia/490488196_18320948275203568_7671271147512977209_n.jpg" alt="Iglesia Manantial" loading="lazy" />
+        <div class="bento-overlay"><span>Comunidad</span></div>
+      </div>
+      <div class="bento-item">
+        <img src="fotos_iglesia/549243569_18338680969203568_8031240038774357518_n.jpg" alt="Iglesia Manantial" loading="lazy" />
+        <div class="bento-overlay"><span>Alabanza</span></div>
+      </div>
+      <div class="bento-item">
+        <img src="fotos_iglesia/498590496_18324666298203568_6127733251844598788_n.jpg" alt="Iglesia Manantial" loading="lazy" />
+        <div class="bento-overlay"><span>Familia</span></div>
+      </div>
+      <div class="bento-item">
+        <img src="fotos_iglesia/502756380_18326570104203568_3698018415161474577_n.jpg" alt="Iglesia Manantial" loading="lazy" />
+        <div class="bento-overlay"><span>Fe</span></div>
+      </div>
+      <div class="bento-item">
+        <img src="fotos_iglesia/566674018_18343029787203568_4585726376041998292_n.jpg" alt="Iglesia Manantial" loading="lazy" />
+        <div class="bento-overlay"><span>Jóvenes</span></div>
+      </div>
+      <div class="bento-item">
+        <img src="fotos_iglesia/517260857_18331215694203568_6083027966653575943_n.jpg" alt="Iglesia Manantial" loading="lazy" />
+        <div class="bento-overlay"><span>Encuentro</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MARQUEE ROW 1 → izquierda -->
+  <div class="marquee-wrap">
+    <div class="marquee-row" id="marquee1"></div>
+    <!-- MARQUEE ROW 2 → derecha -->
+    <div class="marquee-row reverse" id="marquee2"></div>
+  </div>
+</section>
+
+<!-- ════════════ GRUPOS ════════════ -->
+<section class="section" id="grupos">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="tag">Comunidad</span>
+      <h2 class="section-title">Nuestros Grupos</h2>
+      <p class="section-subtitle">Hay un lugar para cada etapa de la vida. Encuentra tu comunidad dentro de Manantial.</p>
+    </div>
+
+    <div class="groups-grid stagger">
+      <div class="group-card">
+        <div class="group-bg group-bg-1"></div>
+        <div class="group-gradient"></div>
+        <div class="group-overlay"></div>
+        <div class="group-info">
+          <div class="group-name">Jóvenes</div>
+          <div class="group-desc">Espacio para que la próxima generación encuentre su propósito y se conecte con Dios.</div>
+          <span class="group-tag">15 – 30 años</span>
+        </div>
+      </div>
+      <div class="group-card">
+        <div class="group-bg group-bg-2"></div>
+        <div class="group-gradient"></div>
+        <div class="group-overlay"></div>
+        <div class="group-info">
+          <div class="group-name">Manantial Kids</div>
+          <div class="group-desc">Un ambiente seguro y divertido donde los niños aprenden del amor de Dios.</div>
+          <span class="group-tag">3 – 12 años</span>
+        </div>
+      </div>
+      <div class="group-card">
+        <div class="group-bg group-bg-3"></div>
+        <div class="group-gradient"></div>
+        <div class="group-overlay"></div>
+        <div class="group-info">
+          <div class="group-name">Mujeres</div>
+          <div class="group-desc">Comunidad de mujeres que se fortalecen mutuamente en fe, identidad y propósito.</div>
+          <span class="group-tag">Ministerio Femenino</span>
+        </div>
+      </div>
+      <div class="group-card">
+        <div class="group-bg group-bg-4"></div>
+        <div class="group-gradient"></div>
+        <div class="group-overlay"></div>
+        <div class="group-info">
+          <div class="group-name">Varones</div>
+          <div class="group-desc">Hombres que se desafían a crecer como líderes en el hogar, la iglesia y la sociedad.</div>
+          <span class="group-tag">Ministerio Masculino</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ TALLERES ════════════ -->
+<section class="section section-alt" id="talleres">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="tag">Formación</span>
+      <h2 class="section-title">Talleres & Formación</h2>
+      <p class="section-subtitle">Equipamos a cada creyente para vivir una vida íntegra y propositiva en todas las áreas.</p>
+    </div>
+
+    <div class="workshops-grid stagger">
+      <div class="workshop-card">
+        <div class="workshop-icon">📖</div>
+        <div class="workshop-title">Discipulado Fundamentos</div>
+        <div class="workshop-desc">Programa de 8 semanas para nuevos creyentes. Bases de la fe cristiana, la oración y la vida en comunidad.</div>
+        <div class="workshop-meta">
+          <span class="workshop-badge">📅 Trimestral</span>
+          <span class="workshop-badge">⏱ 8 semanas</span>
+        </div>
+      </div>
+      <div class="workshop-card">
+        <div class="workshop-icon">💰</div>
+        <div class="workshop-title">Finanzas con Propósito</div>
+        <div class="workshop-desc">Workshop práctico sobre administración, ahorro, deudas y mayordomía desde una perspectiva bíblica.</div>
+        <div class="workshop-meta">
+          <span class="workshop-badge">📅 Mensual</span>
+          <span class="workshop-badge">⏱ 4 semanas</span>
+        </div>
+      </div>
+      <div class="workshop-card">
+        <div class="workshop-icon">👫</div>
+        <div class="workshop-title">Matrimonio & Familia</div>
+        <div class="workshop-desc">Herramientas prácticas para construir matrimonios sanos y familias que reflejen el amor de Dios.</div>
+        <div class="workshop-meta">
+          <span class="workshop-badge">📅 Semestral</span>
+          <span class="workshop-badge">⏱ 6 semanas</span>
+        </div>
+      </div>
+      <div class="workshop-card">
+        <div class="workshop-icon">🎯</div>
+        <div class="workshop-title">Liderazgo & Propósito</div>
+        <div class="workshop-desc">Para líderes emergentes. Principios de liderazgo, visión, comunicación y desarrollo de equipos.</div>
+        <div class="workshop-meta">
+          <span class="workshop-badge">📅 Bianual</span>
+          <span class="workshop-badge">⏱ 10 semanas</span>
+        </div>
+      </div>
+      <div class="workshop-card">
+        <div class="workshop-icon">🧠</div>
+        <div class="workshop-title">Salud Mental & Fe</div>
+        <div class="workshop-desc">Conversaciones abiertas sobre bienestar emocional, ansiedad, duelo y resiliencia desde la fe.</div>
+        <div class="workshop-meta">
+          <span class="workshop-badge">📅 Bimestral</span>
+          <span class="workshop-badge">⏱ 3 sesiones</span>
+        </div>
+      </div>
+      <div class="workshop-card">
+        <div class="workshop-icon">🌍</div>
+        <div class="workshop-title">Evangelismo Práctico</div>
+        <div class="workshop-desc">Aprende a compartir tu fe de manera natural y auténtica en tu ambiente laboral, familiar y social.</div>
+        <div class="workshop-meta">
+          <span class="workshop-badge">📅 Trimestral</span>
+          <span class="workshop-badge">⏱ 4 semanas</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ GRABACIONES ════════════ -->
+<section class="section" id="grabaciones" style="background:var(--navy-900)">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="tag" style="background:rgba(147,197,253,.15);color:var(--navy-300)">YouTube</span>
+      <h2 class="section-title" style="color:white">Últimas Grabaciones</h2>
+      <p class="section-subtitle" style="color:rgba(255,255,255,.6)">No te pierdas ningún mensaje. Revive nuestras transmisiones en vivo cuando quieras.</p>
+    </div>
+
+    <div class="recordings-grid stagger" id="recordingsGrid">
+      <!-- Se cargan desde el objeto JS abajo -->
+    </div>
+
+    <div class="recordings-cta reveal">
+      <a href="https://www.youtube.com/@iglesiamanantial_/streams" target="_blank" rel="noopener" class="btn-yt">
+        <svg viewBox="0 0 24 24"><path d="M21.8 8s-.2-1.4-.8-2c-.8-.8-1.6-.8-2-.9C16.8 5 12 5 12 5s-4.8 0-7 .1c-.4 0-1.2.1-2 .9-.6.6-.8 2-.8 2S2 9.6 2 11.2v1.5c0 1.6.2 3.2.2 3.2s.2 1.4.8 2c.8.8 1.8.7 2.3.8C6.8 19 12 19 12 19s4.8 0 7-.2c.4-.1 1.2-.1 2-.9.6-.6.8-2 .8-2s.2-1.6.2-3.2v-1.5C22 9.6 21.8 8 21.8 8zM9.7 14.5V9l5.4 2.8-5.4 2.7z"/></svg>
+        Ver Canal Completo en YouTube
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ CONTACTO ════════════ -->
+<section class="section" id="contacto">
+  <div class="container">
+    <div class="location-inner">
+
+      <!-- TOP: info + redes en 2 columnas -->
+      <div class="location-top">
+        <div class="reveal-left">
+          <span class="tag">Encuéntranos</span>
+          <h2 class="section-title">Ubicación y Contacto</h2>
+          <p class="section-subtitle" style="margin-bottom:40px">Estamos aquí para recibirte. No importa dónde vengas, tienes un lugar en Manantial.</p>
+
+          <div class="contact-blocks">
+            <div class="contact-block">
+              <div class="contact-block-icon">📍</div>
+              <div class="contact-block-text">
+                <h4>Dirección</h4>
+                <p>Argentina 1473, San Ramón<br/>Región Metropolitana, Chile</p>
+              </div>
+            </div>
+            <div class="contact-block">
+              <div class="contact-block-icon">📞</div>
+              <div class="contact-block-text">
+                <h4>Teléfono / WhatsApp</h4>
+                <a href="tel:+56912345678">+56 9 1234 5678</a>
+              </div>
+            </div>
+            <div class="contact-block">
+              <div class="contact-block-icon">✉️</div>
+              <div class="contact-block-text">
+                <h4>Correo electrónico</h4>
+                <a href="mailto:hola@manantialdevida.cl">hola@manantialdevida.cl</a>
+              </div>
+            </div>
+            <div class="contact-block">
+              <div class="contact-block-icon">🕐</div>
+              <div class="contact-block-text">
+                <h4>Culto Principal</h4>
+                <p>Domingos 10:00 AM</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal-right" style="padding-top:8px">
+          <h3 style="font-size:1.1rem;font-weight:700;color:var(--navy-900);margin-bottom:20px;">Síguenos en redes</h3>
+          <div class="social-links" style="flex-wrap:wrap;gap:14px;">
+            <a href="#" class="social-btn" title="Facebook">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+            </a>
+            <a href="#" class="social-btn" title="Instagram">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a href="https://www.youtube.com/@iglesiamanantial_" target="_blank" class="social-btn" title="YouTube">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M21.8 8s-.2-1.4-.8-2c-.8-.8-1.6-.8-2-.9C16.8 5 12 5 12 5s-4.8 0-7 .1c-.4 0-1.2.1-2 .9-.6.6-.8 2-.8 2S2 9.6 2 11.2v1.5c0 1.6.2 3.2.2 3.2s.2 1.4.8 2c.8.8 1.8.7 2.3.8C6.8 19 12 19 12 19s4.8 0 7-.2c.4-.1 1.2-.1 2-.9.6-.6.8-2 .8-2s.2-1.6.2-3.2v-1.5C22 9.6 21.8 8 21.8 8zM9.7 14.5V9l5.4 2.8-5.4 2.7z"/></svg>
+            </a>
+            <a href="#" class="social-btn" title="TikTok">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.32 6.32 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34v-7a8.16 8.16 0 0 0 4.77 1.52V6.37a4.85 4.85 0 0 1-1-.32z"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- MAPA ABAJO FULL WIDTH -->
+      <div class="reveal" style="width:100%;">
+        <div class="map-wrapper" style="aspect-ratio:21/8;height:auto;">
+          <iframe
+            src="https://maps.google.com/maps?q=-33.5311173,-70.6456544&z=17&output=embed"
+            allowfullscreen
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            title="Ubicación Iglesia Manantial de Vida – Argentina 1473, San Ramón">
+          </iframe>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════════════ FOOTER ════════════ -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand-name">Manantial de Vida</div>
+        <p class="footer-brand-p">Una iglesia que cree en el poder de la comunidad, la familia y la fe. Bienvenido a casa.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Navegar</h5>
+        <ul>
+          <li><a href="#reuniones">Reuniones</a></li>
+          <li><a href="#quienes-somos">Quiénes Somos</a></li>
+          <li><a href="#grupos">Grupos</a></li>
+          <li><a href="#talleres">Talleres</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Recursos</h5>
+        <ul>
+          <li><a href="#grabaciones">Grabaciones</a></li>
+          <li><a href="#">Donaciones</a></li>
+          <li><a href="#">Peticiones de Oración</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h5>Contacto</h5>
+        <ul>
+          <li><a href="#">hola@manantialdevida.org</a></li>
+          <li><a href="#">WhatsApp</a></li>
+          <li><a href="#contacto">Cómo llegar</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 Iglesia Manantial de Vida. Todos los derechos reservados.</p>
+      <p>Hecho con ❤️ para la gloria de Dios</p>
+    </div>
+  </div>
+</footer>
+
+<!-- ════════════ SCRIPTS ════════════ -->
+<script>
+  /* ── DATOS EDITABLES ─────────────────────────────────────── */
+
+  /**
+   * MENSAJE SEMANAL
+   * Actualiza este objeto cada semana con el versículo y mensaje.
+   */
+  const weeklyMessage = {
+    verse: '"Jesús le dijo: Yo soy el camino, y la verdad, y la vida."',
+    reference: 'Juan 14:6',
+    message: 'Esta semana reflexionamos sobre la identidad de Cristo como nuestro único camino hacia el Padre. Sea cual sea la situación que enfrentas, Él es la respuesta.',
+    week: 12,
+    year: 2025
+  };
+
+  /**
+   * GRABACIONES DE YOUTUBE
+   * Reemplaza los videoId con los IDs reales de tus videos de YouTube.
+   * El ID está en la URL: youtube.com/watch?v=ESTE_ES_EL_ID
+   */
+  const recordings = [
+    {
+      videoId: 'MMl-pKX9rPc',
+      title: 'Domingo de Vida',
+      date: 'Último Domingo',
+      duration: 'En vivo'
+    },
+    {
+      videoId: 'B78wJSxpWbM',
+      title: 'Miércoles de Vida',
+      date: 'Último Miércoles',
+      duration: 'En vivo'
+    },
+    {
+      videoId: 'Ho1nx0PXcFo',
+      title: 'Domingo de Vida',
+      date: 'Anterior',
+      duration: 'En vivo'
+    }
+  ];
+
+  /* ── INYECCIÓN DE DATOS ──────────────────────────────────── */
+
+  // Mensaje semanal
+  document.getElementById('weeklyVerse').textContent = weeklyMessage.verse;
+  document.getElementById('weeklyRef').textContent = weeklyMessage.reference;
+  document.getElementById('weeklyMsg').textContent = weeklyMessage.message;
+  document.getElementById('weeklyNum').textContent = weeklyMessage.week + '/' + weeklyMessage.year;
+
+  const now = new Date();
+  const opts = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+  document.getElementById('weeklyDate').textContent = now.toLocaleDateString('es-ES', opts);
+
+  // Grabaciones
+  const grid = document.getElementById('recordingsGrid');
+  recordings.forEach(r => {
+    grid.innerHTML += `
+      <div class="recording-card">
+        <div class="recording-thumb">
+          <div class="recording-play" onclick="openVideo('${r.videoId}', this)">
+            <div class="recording-play-btn">
+              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+          </div>
+          <img src="https://img.youtube.com/vi/${r.videoId}/maxresdefault.jpg"
+               alt="${r.title}"
+               style="width:100%;height:100%;object-fit:cover;"
+               onerror="this.style.display='none'">
+        </div>
+        <div class="recording-info">
+          <div class="recording-date">${r.date}</div>
+          <div class="recording-title">${r.title}</div>
+          <div class="recording-duration">
+            <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+            ${r.duration}
+          </div>
+        </div>
+      </div>`;
+  });
+
+  function openVideo(id, el) {
+    const thumb = el.closest('.recording-thumb');
+    thumb.innerHTML = `<iframe src="https://www.youtube.com/embed/${id}?autoplay=1" allowfullscreen allow="autoplay"></iframe>`;
+  }
+
+  /* ── ANIMACIÓN: RIPPLES + LÍNEAS ────────────────────────── */
+  const container = document.getElementById('particles');
+
+  // Ripple rings — 3 orígenes fijos temáticamente posicionados
+  const origins = [
+    { x: 30, y: 55 },
+    { x: 68, y: 38 },
+    { x: 50, y: 75 }
+  ];
+  origins.forEach(o => {
+    for (let r = 0; r < 4; r++) {
+      const size = 220 + r * 160;
+      const ring = document.createElement('div');
+      ring.className = 'ripple';
+      ring.style.cssText = `
+        width:${size}px; height:${size}px;
+        left:${o.x}%; top:${o.y}%;
+        animation-duration:${5 + r * 1.8}s;
+        animation-delay:${r * 1.4}s;
+      `;
+      container.appendChild(ring);
+    }
+  });
+
+  // Líneas verticales que caen suavemente
+  for (let i = 0; i < 10; i++) {
+    const line = document.createElement('div');
+    line.className = 'drift-line';
+    const h = 80 + Math.random() * 120;
+    line.style.cssText = `
+      left:${Math.random()*100}%;
+      height:${h}px;
+      animation-duration:${10 + Math.random()*10}s;
+      animation-delay:${Math.random()*10}s;
+    `;
+    container.appendChild(line);
+  }
+
+  /* ── NAVBAR SCROLL ───────────────────────────────────────── */
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
+
+  /* ── MOBILE NAV ──────────────────────────────────────────── */
+  const mobileNav = document.getElementById('mobileNav');
+  document.getElementById('navHamburger').addEventListener('click', () => mobileNav.classList.add('open'));
+  document.getElementById('mobileClose').addEventListener('click', () => mobileNav.classList.remove('open'));
+  function closeMobile() { mobileNav.classList.remove('open'); }
+
+
+  /* ── INTERSECTION OBSERVER ───────────────────────────────── */
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .stagger').forEach(el => {
+    observer.observe(el);
+  });
+
+  /* ── MARQUEE GALERÍA ─────────────────────────────────────── */
+  const marqueePhotos = [
+    '524474301_18332734015203568_5856115129663703514_n.jpg',
+    '527353245_18333654478203568_4834642581358784359_n.jpg',
+    '534341202_18335278312203568_1903859691371739858_n.jpg',
+    '545350482_1710469799665025_7925927200818426736_n.jpg',
+    '548849153_18338678425203568_5213295988188346371_n.jpg',
+    '549243569_18338680969203568_8031240038774357518_n.jpg',
+    '566674018_18343029787203568_4585726376041998292_n.jpg',
+    '567858176_18344190133203568_2041520303912015783_n.jpg',
+    '576497823_18347071261203568_252881570710754672_n.jpg',
+    '587378292_18349922737203568_6273701080756596270_n.jpg',
+    '589925667_18354892360203568_6425830656020897401_n.jpg',
+    '590393523_18353186188203568_1789852685862224654_n.jpg',
+    '609156205_18354136732203568_8820227600407276607_n.jpg',
+    '609246233_18354150040203568_1841510163174996711_n.jpg',
+    '623942073_18357415309203568_1703812612392171255_n.jpg',
+    '627989786_18359955874203568_727982460498224815_n.jpg',
+  ];
+
+  function buildMarqueeSet(photos) {
+    return photos.map(f => `
+      <div class="marquee-photo">
+        <img src="fotos_iglesia/${f}" alt="Iglesia Manantial de Vida" loading="lazy" />
+        <div class="marquee-photo-overlay"></div>
+      </div>`).join('');
+  }
+
+  const half = Math.ceil(marqueePhotos.length / 2);
+  const row1Photos = marqueePhotos.slice(0, half);
+  const row2Photos = marqueePhotos.slice(half);
+
+  // duplicate for seamless loop
+  const m1 = document.getElementById('marquee1');
+  const m2 = document.getElementById('marquee2');
+  m1.innerHTML = buildMarqueeSet(row1Photos) + buildMarqueeSet(row1Photos);
+  m2.innerHTML = buildMarqueeSet(row2Photos) + buildMarqueeSet(row2Photos);
+
+  /* ── CURSOR GLOW ─────────────────────────────────────────── */
+  const glow = document.getElementById('cursorGlow');
+  document.addEventListener('mousemove', e => {
+    glow.style.left = e.clientX + 'px';
+    glow.style.top  = e.clientY + 'px';
+  });
+
+  /* ── PARALLAX HERO ───────────────────────────────────────── */
+  const heroBg = document.querySelector('.hero-bg');
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    if (heroBg) heroBg.style.transform = `translateY(${y * 0.3}px)`;
+  }, { passive: true });
+
+  /* ── PARALLAX SCROLL en imágenes ─────────────────────────── */
+  const parallaxItems = [
+    { el: document.querySelector('.about-img-box'), speed: 0.08 },
+    ...Array.from(document.querySelectorAll('.pastor-photo')).map(el => ({ el, speed: 0.06 })),
+    ...Array.from(document.querySelectorAll('.bento-item')).map((el, i) => ({ el, speed: 0.04 + i * 0.01 })),
+  ].filter(x => x.el);
+
+  function applyParallax() {
+    const scrollY = window.scrollY;
+    parallaxItems.forEach(({ el, speed }) => {
+      const rect = el.getBoundingClientRect();
+      const center = rect.top + rect.height / 2;
+      const offset = (window.innerHeight / 2 - center) * speed;
+      const img = el.querySelector('img');
+      if (img) img.style.transform = `translateY(${offset}px) scale(1.06)`;
+    });
+  }
+  window.addEventListener('scroll', applyParallax, { passive: true });
+
+  /* ── TILT 3D en cards al hover ───────────────────────────── */
+  document.querySelectorAll('.pastor-card, .schedule-card, .group-card, .bento-item').forEach(card => {
+    card.addEventListener('mousemove', e => {
+      const r = card.getBoundingClientRect();
+      const x = ((e.clientX - r.left) / r.width  - 0.5) * 14;
+      const y = ((e.clientY - r.top)  / r.height - 0.5) * -14;
+      card.style.transform = `perspective(800px) rotateY(${x}deg) rotateX(${y}deg) translateY(-6px)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = '';
+      card.style.transition = 'transform .5s cubic-bezier(.4,0,.2,1)';
+    });
+    card.addEventListener('mouseenter', () => {
+      card.style.transition = 'transform .1s ease';
+    });
+  });
+</script>
+</body>
+</html>
